@@ -17,6 +17,8 @@
 
 #include <trace/events/mmcio.h>
 
+#include <linux/moduleparam.h>
+
 bool fsync_enabled = true;
 module_param(fsync_enabled, bool, 0755);
 
@@ -117,6 +119,9 @@ SYSCALL_DEFINE1(syncfs, int, fd)
 	if (!fsync_enabled)
 		return 0;
 
+	if (!fsync_enabled)
+			return 0;
+
 	file = fget_light(fd, &fput_needed);
 	if (!file)
 		return -EBADF;
@@ -144,10 +149,9 @@ SYSCALL_DEFINE1(syncfs, int, fd)
 int vfs_fsync_range(struct file *file, loff_t start, loff_t end, int datasync)
 {
 	int err;
-
 	if (!fsync_enabled)
-		return 0;
-		
+			return 0;
+			
 	if (!file->f_op || !file->f_op->fsync)
 		return -EINVAL;
 	trace_vfs_fsync(file);
@@ -168,8 +172,8 @@ EXPORT_SYMBOL(vfs_fsync_range);
 int vfs_fsync(struct file *file, int datasync)
 {
 	if (!fsync_enabled)
-		return 0;
-		
+			return 0;
+			
 	return vfs_fsync_range(file, 0, LLONG_MAX, datasync);
 }
 EXPORT_SYMBOL(vfs_fsync);
@@ -230,6 +234,9 @@ static int do_fsync(unsigned int fd, int datasync)
 	
 	if (!fsync_enabled)
 		return 0;
+
+	if (!fsync_enabled)
+			return 0;
 
 	file = fget(fd);
 	if (file) {
@@ -295,24 +302,24 @@ no_async:
 SYSCALL_DEFINE1(fsync, unsigned int, fd)
 {
 	if (!fsync_enabled)
-		return 0;
-	
+			return 0;
+			
 	return do_fsync(fd, 0);
 }
 
 SYSCALL_DEFINE1(fdatasync, unsigned int, fd)
 {
 	if (!fsync_enabled)
-		return 0;
-		
+			return 0;
+			
 	return do_fsync(fd, 1);
 }
 
 int generic_write_sync(struct file *file, loff_t pos, loff_t count)
 {
 	if (!fsync_enabled)
-		return 0;
-		
+			return 0;
+			
 	if (!(file->f_flags & O_DSYNC) && !IS_SYNC(file->f_mapping->host))
 		return 0;
 	return vfs_fsync_range(file, pos, pos + count - 1,
@@ -331,7 +338,7 @@ SYSCALL_DEFINE(sync_file_range)(int fd, loff_t offset, loff_t nbytes,
 	umode_t i_mode;
 
 	if (!fsync_enabled)
-		return 0;
+			return 0;
 
 	ret = -EINVAL;
 	if (flags & ~VALID_FLAGS)
