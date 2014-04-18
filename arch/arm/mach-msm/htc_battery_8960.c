@@ -373,7 +373,7 @@ int htc_gauge_event_notify(enum htc_gauge_event event)
 	switch (event) {
 	case HTC_GAUGE_EVENT_READY:
 		if (!htc_batt_info.igauge) {
-			pr_err("[BATT]err: htc_gauge is not hooked.\n");
+			pr_debug("[BATT]err: htc_gauge is not hooked.\n");
 			break;
 		}
 		mutex_lock(&htc_batt_info.info_lock);
@@ -537,7 +537,7 @@ int htc_charger_event_notify(enum htc_charger_event event)
 		break;
 	case HTC_CHARGER_EVENT_READY:
 		if (!htc_batt_info.icharger) {
-			pr_err("[BATT]err: htc_charger is not hooked.\n");
+			pr_debug("[BATT]err: htc_charger is not hooked.\n");
 				
 			break;
 		}
@@ -1994,7 +1994,7 @@ static void batt_level_adjust(unsigned long time_since_last_update_ms)
 					htc_batt_info.rep.level = htc_batt_info.rep.level -
 						(2 - dropping_level);
 				}
-				pr_info("[BATT] remap: enter low temperature section, "
+				pr_debug("[BATT] remap: enter low temperature section, "
 						"store_level:%d%%, dropping_level:%d%%, "
 						"prev_level:%d%%, level:%d%%.\n"
 						, store_level, prev_level, dropping_level
