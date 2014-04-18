@@ -655,7 +655,7 @@ static void htc_pm_monitor_work_func(struct work_struct *work)
 
 	
 	htc_debug_flag_show();
-	pr_info("[K][PM] hTC PM Statistic done\n");
+	pr_debug("[K][PM] hTC PM Statistic done\n");
 }
 
 static void htc_kernel_top_accumulation_monitor_work_func(struct work_struct *work)
