@@ -1230,67 +1230,17 @@ static void dbs_check_cpu(struct cpu_dbs_info_s *this_dbs_info)
 		}
 	}
 
-	if (dbs_tuners_ins.shortcut)
-		up_threshold = dbs_tuners_ins.up_threshold;
-	else
-		up_threshold = up_threshold_level[1];
+	/* calculate the scaled load across CPU */
+	load_at_max_freq = (cur_load * policy->cur)/policy->max;
 
-	
-	if (max_load_freq > up_threshold * policy->cur) {
-		unsigned int freq_next;
-		unsigned int avg_load;
-		int index;
-
-		
-		if (dbs_tuners_ins.shortcut) {
-			freq_next = policy->cpuinfo.max_freq;
-			goto set_freq;
-		}
-
-		avg_load = (prev_load + max_cur_load) >> 1;
-		index = get_cpu_freq_index(policy->cur);
-
-		
-		if (FREQ_NEED_BUSRT(policy->cur) && max_cur_load > up_threshold_level[0]) {
-			freq_next = tblmap[tbl_select[3]][index];
-		}
-		
-		else if (prev_load == 0) {
-			if (max_cur_load > up_threshold_level[0])
-				freq_next = tblmap[tbl_select[3]][index];
-			else
-				freq_next = tblmap[tbl_select[2]][index];
-		}
-		
-		else if (avg_load > up_threshold_level[0]) {
-			freq_next = tblmap[tbl_select[3]][index];
-		}
-		
-		else if (avg_load <= up_threshold_level[1]) {
-			freq_next = tblmap[tbl_select[0]][index];
-		}
-		
-		else {
-			
-			if (max_cur_load > up_threshold_level[0]) {
-				freq_next = tblmap[tbl_select[2]][index];
-			}
-			
-			else {
-				freq_next = tblmap[tbl_select[1]][index];
-			}
-		}
-
-set_freq:
-		dbs_freq_increase(policy, max_cur_load, freq_next);
-		
-		if (policy->cur == policy->max)
-			this_dbs_info->rate_mult = dbs_tuners_ins.sampling_down_factor;
-		return;
-	}
-
-	if (input_event_boosted()) {
-		trace_cpufreq_interactive_already (policy->cpu, max_cur_load, policy->cur, policy->cur, policy->cur);
+	cpufreq_notify_utilization(policy, load_at_max_freq);
+	/* Check for frequency increase */
+	if (max_load_freq > dbs_tuners_ins.up_threshold * policy->cur) {
+		/* If switching to max speed, apply sampling_down_factor */
+		if (policy->cur < policy->max)
+			this_dbs_info->rate_mult =
+				dbs_tuners_ins.sampling_down_factor;
+		dbs_freq_increase(policy, policy->max);
 		return;
 	}
 
