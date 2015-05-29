@@ -284,8 +284,14 @@ static uint16_t led_low_cap_limit_dual = 14;
 static ssize_t led_ril_status_get(struct device *dev,
 				struct device_attribute *attr, char *buf)
 {
+<<<<<<< HEAD
 	ssize_t length;
 	length = sprintf(buf, "%d\n", led_ril_status_value);
+=======
+	ssize_t length = 0;
+       if(buf)
+	    length = sprintf(buf, "%d\n", led_ril_status_value);
+>>>>>>> c08bb19... fix compiler warnings
 	return length;
 }
 
@@ -305,8 +311,14 @@ static ssize_t led_ril_status_set(struct device *dev,
 static ssize_t led_wimax_status_get(struct device *dev,
 				struct device_attribute *attr, char *buf)
 {
+<<<<<<< HEAD
 	ssize_t length;
 	length = sprintf(buf, "%d\n", led_wimax_status_value);
+=======
+	ssize_t length = 0;
+	if(buf)
+	    length = sprintf(buf, "%d\n", led_wimax_status_value);
+>>>>>>> c08bb19... fix compiler warnings
 	return length;
 }
 
@@ -326,8 +338,14 @@ static ssize_t led_wimax_status_set(struct device *dev,
 static ssize_t led_hotspot_status_get(struct device *dev,
 				struct device_attribute *attr, char *buf)
 {
+<<<<<<< HEAD
 	ssize_t length;
 	length = sprintf(buf, "%d\n", led_hotspot_status_value);
+=======
+	ssize_t length = 0;
+	if(buf)
+	    length = sprintf(buf, "%d\n", led_hotspot_status_value);
+>>>>>>> c08bb19... fix compiler warnings
 	return length;
 }
 
@@ -346,24 +364,42 @@ static ssize_t led_hotspot_status_set(struct device *dev,
 static ssize_t low_temp_limit_get(struct device *dev,
 				struct device_attribute *attr, char *buf)
 {
+<<<<<<< HEAD
 	ssize_t length;
 	length = sprintf(buf, "%d\n", led_low_temp_limit);
+=======
+	ssize_t length = 0;
+	if(buf)
+	    length = sprintf(buf, "%d\n", led_low_temp_limit);
+>>>>>>> c08bb19... fix compiler warnings
 	return length;
 }
 
 static ssize_t low_cap_limit_get(struct device *dev,
 				struct device_attribute *attr, char *buf)
 {
+<<<<<<< HEAD
 	ssize_t length;
 	length = sprintf(buf, "%d\n", led_low_cap_limit);
+=======
+	ssize_t length = 0;
+	if(buf)
+	    length = sprintf(buf, "%d\n", led_low_cap_limit);
+>>>>>>> c08bb19... fix compiler warnings
 	return length;
 }
 
 static ssize_t low_cap_limit_dual_get(struct device *dev,
 				struct device_attribute *attr, char *buf)
 {
+<<<<<<< HEAD
 	ssize_t length;
 	length = sprintf(buf, "%d\n", led_low_cap_limit_dual);
+=======
+	ssize_t length = 0;
+	if(buf)
+	    length = sprintf(buf, "%d\n", led_low_cap_limit_dual);
+>>>>>>> c08bb19... fix compiler warnings
 	return length;
 }
 
